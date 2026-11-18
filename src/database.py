@@ -8,6 +8,29 @@ def get_connection():
     connection=sqlite3.connect(DATABASE_NAME)
     connection.row_factory=sqlite3.Row
     return connection
+def add_missing_columns():
+    create_tables()
+    connection = get_connection()
+
+    existing_columns = [
+        row[1]
+        for row in connection.execute(
+            "PRAGMA table_info(jobs)"
+        ).fetchall()
+    ]
+
+    if "experience_level" not in existing_columns:
+        connection.execute(
+            "ALTER TABLE jobs ADD COLUMN experience_level TEXT"
+        )
+
+    if "fresher_eligible" not in existing_columns:
+        connection.execute(
+            "ALTER TABLE jobs ADD COLUMN fresher_eligible INTEGER"
+        )
+
+    connection.commit()
+    connection.close()
 def create_tables():
     """create the job table if it doesnot exist"""
     connection = get_connection()
@@ -75,4 +98,5 @@ def save_jobs(jobs):
 
 if __name__ == "__main__":
     create_tables()
+    add_missing_columns()
     print("Database and jobs table created successfully!")

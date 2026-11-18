@@ -1,0 +1,44 @@
+{
+    "greenhouse_boards": [
+        {
+            "board_token": "akunacapital",
+            "company": "Akunacapital",
+            "source": "Greenhouse"
+        },
+        {
+            "board_token": "cannondesign",
+            "company": "Cannondesign",
+            "source": "Greenhouse"
+        },
+        {
+            "board_token": "cloudflare",
+            "company": "Cloudflare",
+            "source": "Greenhouse"
+        },
+        {
+            "board_token": "ensono",
+            "company": "Ensono",
+            "source": "Greenhouse"
+        },
+        {
+            "board_token": "formlabs",
+            "company": "Formlabs",
+            "source": "Greenhouse"
+        },
+        {
+            "board_token": "harnessinc",
+            "company": "Harnessinc",
+            "source": "Greenhouse"
+        },
+        {
+            "board_token": "rubrik",
+            "company": "Rubrik",
+            "source": "Greenhouse"
+        },
+        {
+            "board_token": "wizinc",
+            "company": "Wizinc",
+            "source": "Greenhouse"
+        }
+    ]
+}
