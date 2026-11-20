@@ -35,21 +35,50 @@ def create_fresher_tables():
             )
         """)
 
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS rejected_fresher_jobs (
+                id INTEGER PRIMARY KEY,
+                job_title TEXT NOT NULL,
+                company TEXT NOT NULL,
+                location TEXT,
+                job_description TEXT,
+                job_url TEXT,
+                source TEXT,
+                experience_level TEXT,
+                min_experience REAL,
+                max_experience REAL,
+                classification_source TEXT,
+                created_at TIMESTAMP,
+                rejection_reason TEXT,
+                rejected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
         connection.commit()
-        print("Fresher database table created successfully.")
+        print("Fresher database tables created successfully.")
 
     finally:
         connection.close()
 
 
+
 def save_fresher_jobs(jobs):
     connection = get_fresher_connection()
     saved = 0
+    updated = 0
 
     try:
         for job in jobs:
+
+            # Check whether this job URL already exists.
+            existing = connection.execute("""
+                SELECT 1
+                FROM fresher_jobs
+                WHERE job_url = ?
+            """, (job["job_url"],)).fetchone()
+
             cursor = connection.execute("""
-                INSERT OR IGNORE INTO fresher_jobs (
+                INSERT INTO fresher_jobs (
                     job_title,
                     company,
                     location,
@@ -62,6 +91,20 @@ def save_fresher_jobs(jobs):
                     classification_source
                 )
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+
+                ON CONFLICT(job_url) DO UPDATE SET
+                    job_title = excluded.job_title,
+                    company = excluded.company,
+                    location = excluded.location,
+                    job_description = excluded.job_description,
+                    source = excluded.source
+
+                WHERE
+                    fresher_jobs.job_title IS NOT excluded.job_title
+                    OR fresher_jobs.company IS NOT excluded.company
+                    OR fresher_jobs.location IS NOT excluded.location
+                    OR fresher_jobs.job_description IS NOT excluded.job_description
+                    OR fresher_jobs.source IS NOT excluded.source
             """, (
                 job["job_title"],
                 job["company"],
@@ -75,7 +118,11 @@ def save_fresher_jobs(jobs):
                 job.get("classification_source")
             ))
 
-            saved += cursor.rowcount
+            if cursor.rowcount == 1:
+                if existing:
+                    updated += 1
+                else:
+                    saved += 1
 
         connection.commit()
 
@@ -86,4 +133,9 @@ def save_fresher_jobs(jobs):
     finally:
         connection.close()
 
-    return saved
+    print(f"New jobs inserted: {saved}")
+    print(f"Existing jobs updated: {updated}")
+
+    return saved + updated
+
+

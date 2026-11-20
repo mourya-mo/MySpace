@@ -14,11 +14,9 @@ def clean_description(description):
         return ""
 
     description = html.unescape(description)
-
     soup = BeautifulSoup(description, "html.parser")
 
     text = soup.get_text(separator=" ", strip=True)
-
     text = re.sub(r"\s+", " ", text)
 
     return text.strip()
@@ -40,27 +38,19 @@ def extract_experience(text):
 
     year_unit = r"(?:years?|yrs?|yr)"
 
-    # Find sentences containing experience-related terms.
-    sentences = re.split(
-        r"(?<=[!?])\s+|(?<=\.)\s+|[;\n]+",
-        text
-    )
-
-    relevant_sentences = []
+    sentences = re.split(r"[;!\n?]+|(?<=\.)\s+", text)
 
     context_pattern = (
         r"\b(experience|experienced|candidate|applicant|"
-        r"qualification|qualifications|required|requirement|"
-        r"professional|minimum|work experience)\b"
+        r"qualification|required|requirement|professional|"
+        r"minimum|work experience)\b"
     )
 
-    for sentence in sentences:
-
-        if not re.search(r"\d", sentence):
-            continue
-
-        if re.search(context_pattern, sentence):
-            relevant_sentences.append(sentence)
+    relevant_sentences = [
+        sentence for sentence in sentences
+        if re.search(r"\d", sentence)
+        and re.search(context_pattern, sentence)
+    ]
 
     relevant_text = " ".join(relevant_sentences)
 
@@ -73,13 +63,13 @@ def extract_experience(text):
 
     # Explicitly no experience required.
     no_experience_pattern = (
-        r"no experience required|"
-        r"no prior experience|"
-        r"without prior experience|"
-        r"zero experience"
+        r"\bno experience required\b|"
+        r"\bno prior experience\b|"
+        r"\bwithout prior experience\b|"
+        r"\bzero experience\b"
     )
 
-    if re.search(no_experience_pattern, relevant_text):
+    if re.search(no_experience_pattern, text):
 
         return {
             "min_years": 0,
@@ -89,14 +79,11 @@ def extract_experience(text):
 
     # Example: 0-2 years or 1 to 2 years.
     range_pattern = (
-        rf"(\d+(?:\.\d+)?)\s*(?:to|-)\s*"
-        rf"(\d+(?:\.\d+)?)\s*{year_unit}"
+        rf"\b(\d+(?:\.\d+)?)\s*(?:to|-)\s*"
+        rf"(\d+(?:\.\d+)?)\s*{year_unit}\b"
     )
 
-    range_matches = re.findall(
-        range_pattern,
-        relevant_text
-    )
+    range_matches = re.findall(range_pattern, relevant_text)
 
     if range_matches:
 
@@ -106,7 +93,6 @@ def extract_experience(text):
         }
 
         if len(ranges) != 1:
-
             return {
                 "min_years": None,
                 "max_years": None,
@@ -121,26 +107,25 @@ def extract_experience(text):
             "status": "Range"
         }
 
-    # Example: 2+ years or at least 2 years.
+    # Example: 2+ years, at least 2 years.
     minimum_pattern = (
-        rf"(?:at least\s+)?(\d+(?:\.\d+)?)\s*\+\s*{year_unit}|"
-        rf"at least\s+(\d+(?:\.\d+)?)\s*{year_unit}"
+        rf"\b(\d+(?:\.\d+)?)\s*\+\s*{year_unit}\b|"
+        rf"\bat least\s+(\d+(?:\.\d+)?)\s*{year_unit}\b|"
+        rf"\bminimum of\s+(\d+(?:\.\d+)?)\s*{year_unit}\b"
     )
 
     minimum_matches = re.findall(
-        minimum_pattern,
-        relevant_text
+        minimum_pattern, relevant_text
     )
 
     if minimum_matches:
 
         values = {
-            float(first or second)
-            for first, second in minimum_matches
+            float(next(value for value in match if value))
+            for match in minimum_matches
         }
 
         if len(values) != 1:
-
             return {
                 "min_years": None,
                 "max_years": None,
@@ -157,23 +142,16 @@ def extract_experience(text):
 
     # Example: 1 year of experience.
     simple_pattern = (
-        rf"(\d+(?:\.\d+)?)\s*{year_unit}"
+        rf"\b(\d+(?:\.\d+)?)\s*{year_unit}\b"
     )
 
-    simple_matches = re.findall(
-        simple_pattern,
-        relevant_text
-    )
+    simple_matches = re.findall(simple_pattern, relevant_text)
 
     if simple_matches:
 
-        values = {
-            float(value)
-            for value in simple_matches
-        }
+        values = {float(value) for value in simple_matches}
 
         if len(values) != 1:
-
             return {
                 "min_years": None,
                 "max_years": None,
@@ -203,29 +181,28 @@ def is_senior_title(title):
 
     title = (title or "").lower()
 
-    senior_keywords = [
-        "senior",
-        "sr.",
-        "staff engineer",
-        "staff software",
-        "principal",
-        "lead engineer",
-        "team lead",
-        "technical lead",
-        "engineering manager",
-        "product manager",
-        "project manager",
-        "program manager",
-        "director",
-        "vice president",
-        "vp ",
-        "head of",
-        "architect"
+    senior_patterns = [
+        r"\bsenior\b",
+        r"\bsr\.?\b",
+        r"\bstaff engineer\b",
+        r"\bprincipal\b",
+        r"\blead engineer\b",
+        r"\bteam lead\b",
+        r"\btechnical lead\b",
+        r"\bengineering manager\b",
+        r"\bproduct manager\b",
+        r"\bproject manager\b",
+        r"\bprogram manager\b",
+        r"\bdirector\b",
+        r"\bvice president\b",
+        r"\bvp\b",
+        r"\bhead of\b",
+        r"\barchitect\b"
     ]
 
     return any(
-        keyword in title
-        for keyword in senior_keywords
+        re.search(pattern, title)
+        for pattern in senior_patterns
     )
 
 
@@ -236,10 +213,9 @@ def is_senior_title(title):
 def classify_experience(title, description):
 
     title_lower = (title or "").lower()
-
     text = clean_description(description).lower()
 
-    # Seniority check comes first.
+    # Seniority check.
     if is_senior_title(title_lower):
         return "Not eligible"
 
@@ -247,43 +223,48 @@ def classify_experience(title, description):
 
     minimum = experience["min_years"]
     maximum = experience["max_years"]
+    status = experience["status"]
 
     # Explicit experience requirements.
     if minimum is not None:
 
-        # Exact or range: both boundaries must be 0-2.
         if maximum is not None:
 
-            if minimum >= 0 and maximum <= 2:
+            if 0 <= minimum <= maximum <= 2:
                 return "Eligible"
 
             return "Not eligible"
 
-        # Minimum-only requirement such as 2+ years.
-        if minimum > 2:
+        # 2+ or at least 2 years exceeds the strict limit.
+        if minimum >= 2:
             return "Not eligible"
 
-        # 0+, 1+ or 2+ needs further validation.
+        # 0+ or 1+ is not sufficiently precise.
         return "Unclear"
 
-    # Internship detection.
+    # Internship positions.
     if re.search(r"\b(intern|internship)\b", title_lower):
         return "Eligible"
 
     # Explicit fresher-friendly indicators.
-    fresher_keywords = [
-        "fresh graduates",
-        "recent graduates",
-        "entry-level position",
-        "entry level position",
-        "no experience required",
-        "without prior experience",
-        "freshers can apply",
-        "new graduate",
-        "graduate trainee"
+    fresher_patterns = [
+        r"\bfreshers?\b",
+        r"\bfresh graduates?\b",
+        r"\brecent graduates?\b",
+        r"\bnew graduates?\b",
+        r"\brecent university graduates?\b",
+        r"\bentry[- ]level position\b",
+        r"\bno experience required\b",
+        r"\bwithout prior experience\b",
+        r"\ngraduate trainee\b",
+        r"\bcampus hiring\b",
+        r"\bcampus recruitment\b",
+        r"\buniversity graduate program\b",
+        r"\bgraduate program\b",
+        r"\bgraduate programme\b"
     ]
 
-    if any(keyword in text for keyword in fresher_keywords):
+    if any(re.search(pattern, text) for pattern in fresher_patterns):
         return "Eligible"
 
     return "Unclear"

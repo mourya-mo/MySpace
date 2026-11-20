@@ -1,21 +1,22 @@
 
 import json
 import requests
-
+import re
 from pathlib import Path
 
 from src.fresher_classifier import (
     clean_description,
     extract_experience,
-    classify_experience
+    classify_experience,
+    is_senior_title
 )
+
 
 from src.fresher_database import (
     create_fresher_tables,
     save_fresher_jobs
 )
-
-
+from src.classify_fresher_jobs import classify_pending_jobs
 BOARDS_FILE = Path("data/job_boards.json")
 
 
@@ -42,7 +43,32 @@ INDIA_LOCATIONS = [
     "jaipur"
 ]
 
+def load_company_portal_jobs():
 
+    path = "data/company_portal_jobs.json"
+
+    try:
+        with open(path, "r", encoding="utf-8") as file:
+            leads = json.load(file)
+
+        jobs = []
+
+        for lead in leads:
+            jobs.append({
+                "job_title": lead.get("job_title", ""),
+                "company": lead.get("company", ""),
+                "location": lead.get("location", ""),
+                "job_description": lead.get("description_snippet", ""),
+                "job_url": lead.get("job_url", ""),
+                "source": "Company Portal"
+            })
+
+        print("Company portal leads loaded:", len(jobs))
+        return jobs
+
+    except FileNotFoundError:
+        print("Company portal jobs file not found.")
+        return []
 def is_india_job(location, description):
     location = (location or "").lower()
     description = (description or "").lower()
@@ -253,6 +279,25 @@ def load_job_boards():
 # FILTER INDIA + FRESHER JOBS
 # --------------------------------------------------
 
+
+def needs_groq_validation(description):
+
+    text = clean_description(description).lower()
+
+    groq_patterns = [
+        r"\d+(?:\.\d+)?\s*(?:to|-)\s*\d+(?:\.\d+)?\s*(?:years?|yrs?)",
+        r"\d+(?:\.\d+)?\s*\+?\s*(?:years?|yrs?)",
+        r"\bat least\b.{0,50}\bexperience\b",
+        r"\bminimum\b.{0,50}\bexperience\b",
+        r"\bexperience\b.{0,100}\b(?:required|preferred|desired)\b",
+        r"\b(?:relevant|professional|prior|work)\s+experience\b"
+    ]
+
+    return any(
+        re.search(pattern, text)
+        for pattern in groq_patterns
+    )
+
 def filter_fresher_jobs(all_jobs):
 
     india_count = 0
@@ -263,6 +308,9 @@ def filter_fresher_jobs(all_jobs):
     fresher_jobs = []
 
     for job in all_jobs:
+        if is_senior_title(job["job_title"]):
+            excluded_count += 1
+            continue
 
         description = clean_description(
             job["job_description"]
@@ -286,6 +334,15 @@ def filter_fresher_jobs(all_jobs):
 
         if result == "Unclear":
             unclear_count += 1
+            job["experience_level"] = "Unclear"
+            job["min_experience"] = None
+            job["max_experience"] = None
+            if needs_groq_validation(description):
+                job["classification_source"] = "Pending Groq"
+            else:
+                job["classification_source"] = "Pending Manual Review"
+            
+            fresher_jobs.append(job)
             continue
 
         experience = extract_experience(description)
@@ -362,8 +419,12 @@ if __name__ == "__main__":
     # Create the separate fresher database table.
     create_fresher_tables()
 
-    # Collect postings from all discovered boards.
-    all_jobs = collect_all_jobs()
+    import sys
+
+    if "--company-portals-only" in sys.argv:
+        all_jobs = load_company_portal_jobs()
+    else:
+        all_jobs = collect_all_jobs()
 
     print("\nTotal jobs collected:", len(all_jobs))
 
@@ -372,9 +433,17 @@ if __name__ == "__main__":
 
     # Save only eligible jobs in the new database.
     saved = save_fresher_jobs(fresher_jobs)
+    
 
-    print("\n========== FINAL SUMMARY ==========")
+    print("\n========== COLLECTION SUMMARY ==========")
     print("Total jobs fetched:", len(all_jobs))
-    print("Eligible jobs identified:", len(fresher_jobs))
-    print("New fresher jobs saved:", saved)
+    print("Jobs passed to database:", len(fresher_jobs))
+    print("New or updated jobs:", saved)
+
+    # Run Groq validation for pending jobs.
+    print("\nStarting Groq classification...")
+
+    classify_pending_jobs()
+
+    print("\nDaily collection pipeline completed.")
     print("Database: data/fresher_jobs.db")

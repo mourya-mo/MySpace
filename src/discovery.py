@@ -29,31 +29,31 @@ SEARCH_CONFIG = {
             "job-boards.greenhouse.io"
         ],
         "queries": [
-            'India "new grad" software engineer Greenhouse',
-            'India "graduate trainee" jobs Greenhouse',
-            'India "entry level" software engineer Greenhouse',
-            'India software engineering internship Greenhouse',
-            'India fresher hiring technology companies Greenhouse'
+            'India graduate hiring software engineering jobs Greenhouse',
+            'India software engineering internship jobs Greenhouse',
+            'India entry level technology jobs graduate trainee Greenhouse',
+            'India new graduate data analyst developer jobs Greenhouse',
+            'India university graduate early career hiring Greenhouse'
         ]
     },
     "lever": {
         "domains": ["jobs.lever.co"],
         "queries": [
-            'India "new grad" software engineer Lever',
-            'India "graduate trainee" jobs Lever',
-            'India "entry level" developer Lever',
-            'India software engineering internship Lever',
-            'India fresher hiring technology companies Lever'
+            'India graduate hiring software engineering jobs Lever',
+            'India software engineering internship jobs Lever',
+            'India entry level technology jobs graduate trainee Lever',
+            'India new graduate data analyst developer jobs Lever',
+            'India university graduate early career hiring Lever'
         ]
     },
     "ashby": {
         "domains": ["jobs.ashbyhq.com"],
         "queries": [
-            'India "new grad" software engineer Ashby',
-            'India "graduate trainee" jobs Ashby',
-            'India "entry level" developer Ashby',
-            'India software engineering internship Ashby',
-            'India fresher hiring technology companies Ashby'
+            'India graduate hiring software engineering jobs Ashby',
+            'India software engineering internship jobs Ashby',
+            'India entry level technology jobs graduate trainee Ashby',
+            'India new graduate data analyst developer jobs Ashby',
+            'India university graduate early career hiring Ashby'
         ]
     }
 }
@@ -194,39 +194,64 @@ def discover_boards():
     return list(discovered.values())
 
 
-def load_existing_greenhouse_boards():
-    """Preserve previously discovered Greenhouse boards."""
 
-    if not OLD_GREENHOUSE_FILE.exists():
-        return []
+def load_existing_boards():
+    """Load and preserve all previously discovered company boards."""
 
-    try:
-        with open(OLD_GREENHOUSE_FILE, "r") as file:
-            data = json.load(file)
+    existing_boards = []
 
-        boards = []
+    files = [
+        OUTPUT_FILE,
+        OLD_GREENHOUSE_FILE
+    ]
 
-        for board in data.get("greenhouse_boards", []):
+    for file_path in files:
 
-            board_id = board.get("board_token")
+        if not file_path.exists():
+            continue
 
-            if not board_id:
-                continue
+        try:
+            with open(file_path, "r") as file:
+                data = json.load(file)
 
-            boards.append({
-                "company": board.get("company", board_id),
-                "platform": "greenhouse",
-                "board_id": board_id,
-                "board_url": (
-                    f"https://boards.greenhouse.io/{board_id}"
-                )
-            })
+            # Current job_boards.json contains a list.
+            if isinstance(data, list):
+                existing_boards.extend(data)
 
-        return boards
+            # Older greenhouse_boards.json format.
+            elif isinstance(data, dict):
+                for board in data.get("greenhouse_boards", []):
 
-    except (OSError, json.JSONDecodeError) as error:
-        print("Could not load old boards:", error)
-        return []
+                    board_id = board.get("board_token")
+
+                    if not board_id:
+                        continue
+
+                    existing_boards.append({
+                        "company": board.get("company", board_id),
+                        "platform": "greenhouse",
+                        "board_id": board_id,
+                        "board_url": (
+                            f"https://boards.greenhouse.io/{board_id}"
+                        )
+                    })
+
+        except (OSError, json.JSONDecodeError) as error:
+            print(f"Could not load {file_path}: {error}")
+
+    # Remove duplicates without losing existing entries.
+    unique_boards = {}
+
+    for board in existing_boards:
+
+        platform = board.get("platform")
+        board_id = board.get("board_id")
+
+        if platform and board_id:
+            key = f"{platform.lower()}:{board_id.lower()}"
+            unique_boards[key] = board
+
+    return list(unique_boards.values())
 
 
 def save_boards(boards):
@@ -262,18 +287,16 @@ def save_boards(boards):
 
 if __name__ == "__main__":
 
-    existing_boards = load_existing_greenhouse_boards()
-    print("Existing Greenhouse boards:", len(existing_boards))
+    existing_boards = load_existing_boards()
+
+    print("Existing company boards:", len(existing_boards))
 
     new_boards = discover_boards()
+
     print("New boards discovered:", len(new_boards))
 
+    # Merge existing and newly discovered boards.
     all_boards = existing_boards + new_boards
 
-    # Revalidate old boards before keeping them.
-    validated_boards = [
-        board for board in all_boards
-        if validate_board(board["platform"], board["board_id"])
-    ]
-
-    save_boards(validated_boards)
+    # Save unique boards without discarding existing entries.
+    save_boards(all_boards)

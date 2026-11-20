@@ -3,6 +3,21 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 from pathlib import Path
+from src.auth_database import (
+    initialize_database,
+    register_user,
+    login_user
+)
+from bs4 import BeautifulSoup
+import re
+import html
+from src.admin_dashboard import (
+    get_dashboard_stats,
+    get_daily_job_counts,
+    get_all_users,
+    update_user_status
+)
+from src.ai_assistant import get_ai_response
 
 # ---------------- PAGE CONFIG ----------------
 
@@ -14,6 +29,84 @@ st.set_page_config(
 
 DB_PATH = Path(__file__).parent / "data" / "fresher_jobs.db"
 
+
+def render_ai_assistant():
+    st.title("🤖 MySpace AI Assistant")
+    st.caption("Your personal assistant for jobs, career guidance and interview preparation.")
+
+    if "ai_chat_history" not in st.session_state:
+        st.session_state.ai_chat_history = []
+
+    col1, col2 = st.columns([5, 1])
+
+    with col1:
+        st.markdown("### Ask me anything about your career")
+
+    with col2:
+        if st.button("🗑️ Clear chat"):
+            st.session_state.ai_chat_history = []
+            st.session_state.pop("ai_pending_prompt", None)
+            st.rerun()
+
+    history = st.session_state.ai_chat_history
+
+    # Suggested prompts for a new conversation
+    if not history:
+        st.write("Here are a few things you can ask:")
+
+        suggestions = [
+            "Find Python internship opportunities in Bangalore.",
+            "What skills should I learn to become an AI Engineer?",
+            "Help me prepare for a software engineering interview.",
+            "Explain the responsibilities of a Data Analyst."
+        ]
+
+        for i in range(0, len(suggestions), 2):
+            cols = st.columns(2)
+
+            for j, col in enumerate(cols):
+                index = i + j
+                if index < len(suggestions):
+                    with col:
+                        if st.button(suggestions[index], key=f"ai_suggestion_{index}"):
+                            st.session_state.ai_pending_prompt = suggestions[index]
+                            st.rerun()
+
+    # Display previous messages
+    for message in history:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    # Read a suggested prompt or a message typed by the user
+    prompt = st.session_state.pop("ai_pending_prompt", None)
+
+    if not prompt:
+        prompt = st.chat_input("Ask about jobs, skills, careers or interviews...")
+
+    if prompt:
+        previous_history = history.copy()
+
+        st.session_state.ai_chat_history.append({
+            "role": "user",
+            "content": prompt
+        })
+
+        with st.chat_message("user"):
+            st.markdown(prompt)
+
+        with st.chat_message("assistant"):
+            with st.spinner("MySpace AI is thinking..."):
+                response = get_ai_response(
+                    prompt,
+                    conversation_history=previous_history
+                )
+
+            st.markdown(response)
+
+        st.session_state.ai_chat_history.append({
+            "role": "assistant",
+            "content": response
+        })
 
 # ---------------- LIGHT THEME & CUSTOM DESIGN ----------------
 
@@ -210,6 +303,386 @@ hr {
 </style>
 """, unsafe_allow_html=True)
 
+# ---------------- AUTHENTICATION ----------------
+
+initialize_database()
+
+if "user" not in st.session_state:
+    st.session_state.user = None
+
+if st.session_state.user is None:
+
+    st.markdown("""
+    <div class="hero">
+        <div class="hero-title">Welcome to MySpace 🚀</div>
+        <div class="hero-subtitle">
+            Your journey towards your dream career starts here.
+            Sign in or create an account to explore opportunities.
+        </div>
+        <span class="hero-tag">✨ Built for Freshers</span>
+        <span class="hero-tag">💼 Jobs & Internships</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    login_tab, register_tab = st.tabs(
+        ["🔐 Login", "✨ Create Account"]
+    )
+
+    with login_tab:
+
+        st.markdown("### Welcome back!")
+        st.write("Log in to continue exploring opportunities.")
+
+        with st.form("login_form"):
+
+            email = st.text_input(
+                "Email address",
+                placeholder="Enter your email"
+            )
+
+            password = st.text_input(
+                "Password",
+                type="password",
+                placeholder="Enter your password"
+            )
+
+            login_button = st.form_submit_button(
+                "Login",
+                use_container_width=True
+            )
+
+            if login_button:
+
+                if not email.strip() or not password:
+                    st.error("Please enter your email and password.")
+
+                else:
+                    user = login_user(email, password)
+
+                    if user:
+                        st.session_state.user = user
+                        st.rerun()
+
+                    else:
+                        st.error("Invalid email or password.")
+
+    with register_tab:
+
+        st.markdown("### Create your account")
+        st.write("Join MySpace and discover your next opportunity.")
+
+        with st.form("register_form"):
+
+            full_name = st.text_input(
+                "Full name",
+                placeholder="Enter your full name"
+            )
+
+            email = st.text_input(
+                "Email address",
+                placeholder="Enter your email"
+            )
+
+            password = st.text_input(
+                "Create password",
+                type="password",
+                placeholder="Minimum 8 characters"
+            )
+
+            confirm_password = st.text_input(
+                "Confirm password",
+                type="password"
+            )
+
+            register_button = st.form_submit_button(
+                "Create Account",
+                use_container_width=True
+            )
+
+            if register_button:
+
+                if not full_name.strip() or not email.strip():
+                    st.error("Please fill in all required fields.")
+
+                elif password != confirm_password:
+                    st.error("Passwords do not match.")
+
+                else:
+                    success, message = register_user(
+                        full_name,
+                        email,
+                        password
+                    )
+
+                    if success:
+                        st.success(message)
+
+                        st.session_state.user = login_user(
+                            email,
+                            password
+                        )
+
+                        st.rerun()
+
+                    else:
+                        st.error(message)
+
+    st.stop()
+
+
+# ---------------- LOGGED-IN USER ----------------
+
+current_user = st.session_state.user
+
+# ---------------- ADMIN DASHBOARD ----------------
+
+if current_user["role"] == "admin":
+
+    st.sidebar.markdown("## 🚀 MySpace Admin")
+    st.sidebar.caption(f"Administrator: {current_user['full_name']}")
+    st.sidebar.divider()
+
+    admin_page = st.sidebar.radio(
+        "ADMIN MENU",
+        [
+            "Dashboard",
+            "Job Management",
+            "User Management",
+            "Daily Analytics",
+            "AI Assistant"
+        ]
+    )
+
+    if st.sidebar.button("Logout", use_container_width=True):
+        st.session_state.user = None
+        st.rerun()
+
+    st.markdown("""
+    <div class="hero">
+        <div class="hero-title">Admin Dashboard 👋</div>
+        <div class="hero-subtitle">
+            Monitor your jobs, users and platform activity from one place.
+        </div>
+        <span class="hero-tag">⚙️ Platform Administration</span>
+        <span class="hero-tag">📊 Live Database Statistics</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ---------------- DASHBOARD OVERVIEW ----------------
+
+    if admin_page == "Dashboard":
+
+        st.subheader("Platform Overview")
+
+        stats = get_dashboard_stats()
+
+        col1, col2, col3, col4 = st.columns(4)
+
+        col1.metric("Total Jobs", stats["total_jobs"])
+        col2.metric("Registered Users", stats["total_users"])
+        col3.metric("Jobs Added Today", stats["jobs_today"])
+        col4.metric("Active Users", stats["active_users"])
+
+        st.divider()
+
+        st.subheader("Recent Job Collection Activity")
+
+        daily_data = get_daily_job_counts()
+
+        if not daily_data.empty:
+            chart_data = daily_data.set_index("job_date")
+            st.bar_chart(chart_data["jobs_added"])
+        else:
+            st.info("No job collection history available yet.")
+
+        st.caption(
+            "Active users are users who logged in during the last 30 days."
+        )
+
+    # ---------------- JOB MANAGEMENT ----------------
+
+    elif admin_page == "Job Management":
+
+        st.subheader("Job Management")
+
+        jobs_conn = sqlite3.connect(DB_PATH)
+
+        job_df = pd.read_sql_query("""
+            SELECT
+                id,
+                job_title,
+                company,
+                location,
+                experience_level,
+                source,
+                created_at
+            FROM fresher_jobs
+            ORDER BY id DESC
+        """, jobs_conn)
+
+        jobs_conn.close()
+
+        st.write(f"Total listings: **{len(job_df)}**")
+
+        job_search = st.text_input(
+            "Search jobs",
+            placeholder="Search by title or company..."
+        )
+
+        if job_search:
+            mask = (
+                job_df["job_title"].fillna("").str.contains(
+                    job_search, case=False
+                )
+                |
+                job_df["company"].fillna("").str.contains(
+                    job_search, case=False
+                )
+            )
+
+            job_df = job_df[mask]
+
+        st.dataframe(
+            job_df,
+            use_container_width=True,
+            hide_index=True
+        )
+
+    # ---------------- USER MANAGEMENT ----------------
+
+    elif admin_page == "User Management":
+
+        st.subheader("User Management")
+
+        users = get_all_users()
+
+        if users:
+
+            users_df = pd.DataFrame(users)
+
+            st.write(f"Registered accounts: **{len(users_df)}**")
+
+            st.dataframe(
+                users_df.drop(columns=["id"]),
+                use_container_width=True,
+                hide_index=True
+            )
+
+            st.divider()
+
+            st.markdown("### Manage user access")
+
+            manageable_users = [
+                user for user in users
+                if user["role"] != "admin"
+            ]
+
+            if manageable_users:
+
+                selected_user = st.selectbox(
+                    "Select a user",
+                    manageable_users,
+                    format_func=lambda user: (
+                        f"{user['full_name']} ({user['email']})"
+                    )
+                )
+
+                if selected_user["is_active"]:
+
+                    st.success("This account is active.")
+
+                    if st.button("Deactivate User"):
+                        changed = update_user_status(
+                            selected_user["id"],
+                            False
+                        )
+
+                        if changed:
+                            st.success("User account deactivated.")
+                            st.rerun()
+                        else:
+                            st.error("Unable to update this account.")
+
+                else:
+
+                    st.warning("This account is inactive.")
+
+                    if st.button("Reactivate User"):
+                        changed = update_user_status(
+                            selected_user["id"],
+                            True
+                        )
+
+                        if changed:
+                            st.success("User account reactivated.")
+                            st.rerun()
+                        else:
+                            st.error("Unable to update this account.")
+
+            else:
+                st.info("There are no regular user accounts to manage.")
+
+        else:
+            st.info("No registered users found.")
+
+    # ---------------- DAILY ANALYTICS ----------------
+
+    elif admin_page == "Daily Analytics":
+
+        st.subheader("Daily Job Analytics")
+
+        daily_data = get_daily_job_counts()
+
+        if not daily_data.empty:
+
+            st.markdown("### Jobs added per day")
+
+            st.bar_chart(
+                daily_data.set_index("job_date")["jobs_added"]
+            )
+
+            st.markdown("### Collection history")
+
+            st.dataframe(
+                daily_data,
+                use_container_width=True,
+                hide_index=True
+            )
+
+        else:
+            st.info("No daily job data available.")
+
+    elif admin_page == "AI Assistant":
+        render_ai_assistant()
+
+    st.stop()
+
+
+# ---------------- NORMAL USER SIDEBAR ----------------
+
+
+with st.sidebar:
+
+    st.markdown("## 🚀 MySpace")
+
+    st.write(f"Welcome, **{current_user['full_name']}**")
+
+    st.caption(current_user["email"])
+
+    st.divider()
+
+    st.write("👤 Job Seeker Account")
+    user_page = st.radio(
+    "NAVIGATION",
+    ["Find Jobs", "AI Assistant"],
+    key="user_navigation"
+    )
+
+
+    if st.button("Logout", use_container_width=True):
+
+        st.session_state.user = None
+        st.rerun()
 
 # ---------------- DATABASE ----------------
 
@@ -220,19 +693,22 @@ def load_jobs():
     df = pd.read_sql_query(
         """
         SELECT
-            id,
-            job_title,
-            company,
-            location,
-            job_description,
-            job_url,
-            experience_level,
-            min_experience,
-            max_experience,
-            classification_source,
-            created_at
-        FROM fresher_jobs
-        ORDER BY id DESC
+        id,
+        job_title,
+        company,
+        location,
+        job_description,
+        job_url,
+        experience_level,
+        min_experience,
+        max_experience,
+        classification_source,
+        created_at,
+        is_shortlisted,
+        shortlist_score
+    FROM fresher_jobs
+    WHERE is_shortlisted = 1
+    ORDER BY shortlist_score DESC, id DESC
         """,
         conn
     )
@@ -240,6 +716,35 @@ def load_jobs():
     conn.close()
     return df
 
+
+
+
+def clean_job_description(description):
+
+    if pd.isna(description):
+        return "Job description is not available."
+
+    description = html.unescape(str(description))
+
+    soup = BeautifulSoup(description, "html.parser")
+
+    # Preserve readable paragraph and list formatting
+    for tag in soup.find_all(["br"]):
+        tag.replace_with("\n")
+
+    for tag in soup.find_all(["p", "div", "section"]):
+        tag.insert_before("\n")
+        tag.insert_after("\n")
+
+    for tag in soup.find_all("li"):
+        tag.insert_before("\n• ")
+
+    clean_text = soup.get_text(separator=" ", strip=True)
+
+    clean_text = re.sub(r"[ \t]+", " ", clean_text)
+    clean_text = re.sub(r"\n\s*\n+", "\n\n", clean_text)
+
+    return clean_text.strip()
 
 # ---------------- CITY NORMALIZATION ----------------
 
@@ -290,7 +795,10 @@ def normalize_city(location):
 
 
 # ---------------- HERO SECTION ----------------
+if user_page == "AI Assistant":
+    render_ai_assistant()
 
+    st.stop()
 st.markdown("""
 <div class="hero">
     <div class="hero-title">Your Career Starts Here. 🚀</div>
@@ -319,13 +827,6 @@ if jobs.empty:
     st.stop()
 
 
-# Remove unclear opportunities
-jobs = jobs[
-    jobs["experience_level"]
-    .fillna("")
-    .str.strip()
-    .str.lower() != "unclear"
-].copy()
 
 # Normalize locations
 jobs["city"] = jobs["location"].apply(normalize_city)
@@ -463,13 +964,17 @@ else:
                 f'<span class="job-tag">⏳ {experience}</span>',
                 unsafe_allow_html=True
             )
+            if job["classification_source"] in ["Python", "Groq"]:
+                st.success("Experience classified")
+            else:
+                st.warning("Shortlisted – eligibility review pending")
 
             with st.expander("View job description"):
 
                 description = job["job_description"]
 
                 if pd.notna(description) and str(description).strip():
-                    st.write(description)
+                    st.text(clean_job_description(description))
 
                 else:
                     st.info("Job description is not available.")

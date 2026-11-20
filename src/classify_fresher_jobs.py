@@ -27,8 +27,9 @@ client = Groq(
 
 MODEL = "openai/gpt-oss-120b"
 
-BATCH_SIZE = 5
+BATCH_SIZE = 2
 MAX_RETRIES = 3
+MAX_JOBS_PER_RUN = 10
 
 
 # --------------------------------------------------
@@ -280,18 +281,49 @@ def save_classifications(connection, results):
         elif decision == "Not eligible":
 
             connection.execute("""
+                INSERT OR REPLACE INTO rejected_fresher_jobs (
+                    id,
+                    job_title,
+                    company,
+                    location,
+                    job_description,
+                    job_url,
+                    source,
+                    experience_level,
+                    min_experience,
+                    max_experience,
+                    classification_source,
+                    created_at,
+                    rejection_reason
+                )
+                SELECT
+                    id,
+                    job_title,
+                    company,
+                    location,
+                    job_description,
+                    job_url,
+                    source,
+                    experience_level,
+                    min_experience,
+                    max_experience,
+                    classification_source,
+                    created_at,
+                    ?
+                FROM fresher_jobs
+                WHERE id = ?
+            """, (
+                item.get("reason", "Rejected by Groq classification"),
+                job_id
+            ))
+
+            # Remove it from active listings only after archiving.
+            connection.execute("""
                 DELETE FROM fresher_jobs
                 WHERE id = ?
             """, (job_id,))
 
             excluded += 1
-
-            print(
-                "EXCLUDED:",
-                job_id,
-                "|",
-                item.get("reason", "")
-            )
 
         else:
 
@@ -338,9 +370,9 @@ def classify_pending_jobs():
             SELECT *
             FROM fresher_jobs
             WHERE classification_source = 'Pending Groq'
-               OR experience_level = 'Unclear'
             ORDER BY id
-        """).fetchall()
+            LIMIT ?
+        """,(MAX_JOBS_PER_RUN,)).fetchall()
 
         total_jobs = len(jobs)
 

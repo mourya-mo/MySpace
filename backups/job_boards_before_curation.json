@@ -1,0 +1,854 @@
+[
+    {
+        "company": "Akunacapital",
+        "platform": "greenhouse",
+        "board_id": "akunacapital",
+        "board_url": "https://boards.greenhouse.io/akunacapital"
+    },
+    {
+        "company": "Cannondesign",
+        "platform": "greenhouse",
+        "board_id": "cannondesign",
+        "board_url": "https://boards.greenhouse.io/cannondesign"
+    },
+    {
+        "company": "Cloudflare",
+        "platform": "greenhouse",
+        "board_id": "cloudflare",
+        "board_url": "https://boards.greenhouse.io/cloudflare"
+    },
+    {
+        "company": "Ensono",
+        "platform": "greenhouse",
+        "board_id": "ensono",
+        "board_url": "https://boards.greenhouse.io/ensono"
+    },
+    {
+        "company": "Formlabs",
+        "platform": "greenhouse",
+        "board_id": "formlabs",
+        "board_url": "https://boards.greenhouse.io/formlabs"
+    },
+    {
+        "company": "Harnessinc",
+        "platform": "greenhouse",
+        "board_id": "harnessinc",
+        "board_url": "https://boards.greenhouse.io/harnessinc"
+    },
+    {
+        "company": "Rubrik",
+        "platform": "greenhouse",
+        "board_id": "rubrik",
+        "board_url": "https://boards.greenhouse.io/rubrik"
+    },
+    {
+        "company": "Wizinc",
+        "platform": "greenhouse",
+        "board_id": "wizinc",
+        "board_url": "https://boards.greenhouse.io/wizinc"
+    },
+    {
+        "company": "superapp",
+        "platform": "greenhouse",
+        "board_id": "superapp",
+        "board_url": "https://boards.greenhouse.io/superapp"
+    },
+    {
+        "company": "stripe",
+        "platform": "greenhouse",
+        "board_id": "stripe",
+        "board_url": "https://boards.greenhouse.io/stripe"
+    },
+    {
+        "company": "perpay",
+        "platform": "greenhouse",
+        "board_id": "perpay",
+        "board_url": "https://boards.greenhouse.io/perpay"
+    },
+    {
+        "company": "wehrtyou",
+        "platform": "greenhouse",
+        "board_id": "wehrtyou",
+        "board_url": "https://boards.greenhouse.io/wehrtyou"
+    },
+    {
+        "company": "acceleratepeople",
+        "platform": "greenhouse",
+        "board_id": "acceleratepeople",
+        "board_url": "https://boards.greenhouse.io/acceleratepeople"
+    },
+    {
+        "company": "SingleStore",
+        "platform": "greenhouse",
+        "board_id": "SingleStore",
+        "board_url": "https://boards.greenhouse.io/SingleStore"
+    },
+    {
+        "company": "gleanwork",
+        "platform": "greenhouse",
+        "board_id": "gleanwork",
+        "board_url": "https://boards.greenhouse.io/gleanwork"
+    },
+    {
+        "company": "arcesiumllc",
+        "platform": "greenhouse",
+        "board_id": "arcesiumllc",
+        "board_url": "https://boards.greenhouse.io/arcesiumllc"
+    },
+    {
+        "company": "doordashusa",
+        "platform": "greenhouse",
+        "board_id": "doordashusa",
+        "board_url": "https://boards.greenhouse.io/doordashusa"
+    },
+    {
+        "company": "agoda",
+        "platform": "greenhouse",
+        "board_id": "agoda",
+        "board_url": "https://boards.greenhouse.io/agoda"
+    },
+    {
+        "company": "davinciderivatives",
+        "platform": "greenhouse",
+        "board_id": "davinciderivatives",
+        "board_url": "https://boards.greenhouse.io/davinciderivatives"
+    },
+    {
+        "company": "freshprints",
+        "platform": "greenhouse",
+        "board_id": "freshprints",
+        "board_url": "https://boards.greenhouse.io/freshprints"
+    },
+    {
+        "company": "worldquant",
+        "platform": "greenhouse",
+        "board_id": "worldquant",
+        "board_url": "https://boards.greenhouse.io/worldquant"
+    },
+    {
+        "company": "nirmata",
+        "platform": "greenhouse",
+        "board_id": "nirmata",
+        "board_url": "https://boards.greenhouse.io/nirmata"
+    },
+    {
+        "company": "tide",
+        "platform": "greenhouse",
+        "board_id": "tide",
+        "board_url": "https://boards.greenhouse.io/tide"
+    },
+    {
+        "company": "purestorage",
+        "platform": "greenhouse",
+        "board_id": "purestorage",
+        "board_url": "https://boards.greenhouse.io/purestorage"
+    },
+    {
+        "company": "zinnov",
+        "platform": "greenhouse",
+        "board_id": "zinnov",
+        "board_url": "https://boards.greenhouse.io/zinnov"
+    },
+    {
+        "company": "sigmoid",
+        "platform": "greenhouse",
+        "board_id": "sigmoid",
+        "board_url": "https://boards.greenhouse.io/sigmoid"
+    },
+    {
+        "company": "cleoindia",
+        "platform": "greenhouse",
+        "board_id": "cleoindia",
+        "board_url": "https://boards.greenhouse.io/cleoindia"
+    },
+    {
+        "company": "coherehealth",
+        "platform": "greenhouse",
+        "board_id": "coherehealth",
+        "board_url": "https://boards.greenhouse.io/coherehealth"
+    },
+    {
+        "company": "gitlab",
+        "platform": "greenhouse",
+        "board_id": "gitlab",
+        "board_url": "https://boards.greenhouse.io/gitlab"
+    },
+    {
+        "company": "sumologic",
+        "platform": "greenhouse",
+        "board_id": "sumologic",
+        "board_url": "https://boards.greenhouse.io/sumologic"
+    },
+    {
+        "company": "appian",
+        "platform": "greenhouse",
+        "board_id": "appian",
+        "board_url": "https://boards.greenhouse.io/appian"
+    },
+    {
+        "company": "redwoodsoftware",
+        "platform": "greenhouse",
+        "board_id": "redwoodsoftware",
+        "board_url": "https://boards.greenhouse.io/redwoodsoftware"
+    },
+    {
+        "company": "enterpret",
+        "platform": "greenhouse",
+        "board_id": "enterpret",
+        "board_url": "https://boards.greenhouse.io/enterpret"
+    },
+    {
+        "company": "hackerrank",
+        "platform": "greenhouse",
+        "board_id": "hackerrank",
+        "board_url": "https://boards.greenhouse.io/hackerrank"
+    },
+    {
+        "company": "xai",
+        "platform": "greenhouse",
+        "board_id": "xai",
+        "board_url": "https://boards.greenhouse.io/xai"
+    },
+    {
+        "company": "tanium",
+        "platform": "greenhouse",
+        "board_id": "tanium",
+        "board_url": "https://boards.greenhouse.io/tanium"
+    },
+    {
+        "company": "roblox",
+        "platform": "greenhouse",
+        "board_id": "roblox",
+        "board_url": "https://boards.greenhouse.io/roblox"
+    },
+    {
+        "company": "greenhouse",
+        "platform": "greenhouse",
+        "board_id": "greenhouse",
+        "board_url": "https://boards.greenhouse.io/greenhouse"
+    },
+    {
+        "company": "palantir",
+        "platform": "lever",
+        "board_id": "palantir",
+        "board_url": "https://jobs.lever.co/palantir"
+    },
+    {
+        "company": "weride",
+        "platform": "lever",
+        "board_id": "weride",
+        "board_url": "https://jobs.lever.co/weride"
+    },
+    {
+        "company": "peakgames",
+        "platform": "lever",
+        "board_id": "peakgames",
+        "board_url": "https://jobs.lever.co/peakgames"
+    },
+    {
+        "company": "ion",
+        "platform": "lever",
+        "board_id": "ion",
+        "board_url": "https://jobs.lever.co/ion"
+    },
+    {
+        "company": "zimperium",
+        "platform": "lever",
+        "board_id": "zimperium",
+        "board_url": "https://jobs.lever.co/zimperium"
+    },
+    {
+        "company": "weekdayworks",
+        "platform": "lever",
+        "board_id": "weekdayworks",
+        "board_url": "https://jobs.lever.co/weekdayworks"
+    },
+    {
+        "company": "spreetail",
+        "platform": "lever",
+        "board_id": "spreetail",
+        "board_url": "https://jobs.lever.co/spreetail"
+    },
+    {
+        "company": "getwingapp",
+        "platform": "lever",
+        "board_id": "getwingapp",
+        "board_url": "https://jobs.lever.co/getwingapp"
+    },
+    {
+        "company": "tsmg",
+        "platform": "lever",
+        "board_id": "tsmg",
+        "board_url": "https://jobs.lever.co/tsmg"
+    },
+    {
+        "company": "matchgroup",
+        "platform": "lever",
+        "board_id": "matchgroup",
+        "board_url": "https://jobs.lever.co/matchgroup"
+    },
+    {
+        "company": "thinkahead",
+        "platform": "lever",
+        "board_id": "thinkahead",
+        "board_url": "https://jobs.lever.co/thinkahead"
+    },
+    {
+        "company": "jumpcloud",
+        "platform": "lever",
+        "board_id": "jumpcloud",
+        "board_url": "https://jobs.lever.co/jumpcloud"
+    },
+    {
+        "company": "lalamove",
+        "platform": "lever",
+        "board_id": "lalamove",
+        "board_url": "https://jobs.lever.co/lalamove"
+    },
+    {
+        "company": "hevodata",
+        "platform": "lever",
+        "board_id": "hevodata",
+        "board_url": "https://jobs.lever.co/hevodata"
+    },
+    {
+        "company": "endpointclinical",
+        "platform": "lever",
+        "board_id": "endpointclinical",
+        "board_url": "https://jobs.lever.co/endpointclinical"
+    },
+    {
+        "company": "gohighlevel",
+        "platform": "lever",
+        "board_id": "gohighlevel",
+        "board_url": "https://jobs.lever.co/gohighlevel"
+    },
+    {
+        "company": "smart-working-solutions",
+        "platform": "lever",
+        "board_id": "smart-working-solutions",
+        "board_url": "https://jobs.lever.co/smart-working-solutions"
+    },
+    {
+        "company": "drivetrain",
+        "platform": "lever",
+        "board_id": "drivetrain",
+        "board_url": "https://jobs.lever.co/drivetrain"
+    },
+    {
+        "company": "Sprinto",
+        "platform": "lever",
+        "board_id": "Sprinto",
+        "board_url": "https://jobs.lever.co/Sprinto"
+    },
+    {
+        "company": "merklescience",
+        "platform": "lever",
+        "board_id": "merklescience",
+        "board_url": "https://jobs.lever.co/merklescience"
+    },
+    {
+        "company": "xcimer",
+        "platform": "lever",
+        "board_id": "xcimer",
+        "board_url": "https://jobs.lever.co/xcimer"
+    },
+    {
+        "company": "leverdemo-8",
+        "platform": "lever",
+        "board_id": "leverdemo-8",
+        "board_url": "https://jobs.lever.co/leverdemo-8"
+    },
+    {
+        "company": "leverdemo",
+        "platform": "lever",
+        "board_id": "leverdemo",
+        "board_url": "https://jobs.lever.co/leverdemo"
+    },
+    {
+        "company": "flynncompanies",
+        "platform": "lever",
+        "board_id": "flynncompanies",
+        "board_url": "https://jobs.lever.co/flynncompanies"
+    },
+    {
+        "company": "ema",
+        "platform": "ashby",
+        "board_id": "ema",
+        "board_url": "https://jobs.ashbyhq.com/ema"
+    },
+    {
+        "company": "Commure",
+        "platform": "ashby",
+        "board_id": "Commure",
+        "board_url": "https://jobs.ashbyhq.com/Commure"
+    },
+    {
+        "company": "build-ai",
+        "platform": "ashby",
+        "board_id": "build-ai",
+        "board_url": "https://jobs.ashbyhq.com/build-ai"
+    },
+    {
+        "company": "reacher",
+        "platform": "ashby",
+        "board_id": "reacher",
+        "board_url": "https://jobs.ashbyhq.com/reacher"
+    },
+    {
+        "company": "applied",
+        "platform": "ashby",
+        "board_id": "applied",
+        "board_url": "https://jobs.ashbyhq.com/applied"
+    },
+    {
+        "company": "fellowai",
+        "platform": "ashby",
+        "board_id": "fellowai",
+        "board_url": "https://jobs.ashbyhq.com/fellowai"
+    },
+    {
+        "company": "spruceid",
+        "platform": "ashby",
+        "board_id": "spruceid",
+        "board_url": "https://jobs.ashbyhq.com/spruceid"
+    },
+    {
+        "company": "quora",
+        "platform": "ashby",
+        "board_id": "quora",
+        "board_url": "https://jobs.ashbyhq.com/quora"
+    },
+    {
+        "company": "harvey",
+        "platform": "ashby",
+        "board_id": "harvey",
+        "board_url": "https://jobs.ashbyhq.com/harvey"
+    },
+    {
+        "company": "kong",
+        "platform": "ashby",
+        "board_id": "kong",
+        "board_url": "https://jobs.ashbyhq.com/kong"
+    },
+    {
+        "company": "level-ai",
+        "platform": "ashby",
+        "board_id": "level-ai",
+        "board_url": "https://jobs.ashbyhq.com/level-ai"
+    },
+    {
+        "company": "notion",
+        "platform": "ashby",
+        "board_id": "notion",
+        "board_url": "https://jobs.ashbyhq.com/notion"
+    },
+    {
+        "company": "articul8",
+        "platform": "ashby",
+        "board_id": "articul8",
+        "board_url": "https://jobs.ashbyhq.com/articul8"
+    },
+    {
+        "company": "opengov",
+        "platform": "ashby",
+        "board_id": "opengov",
+        "board_url": "https://jobs.ashbyhq.com/opengov"
+    },
+    {
+        "company": "shield",
+        "platform": "ashby",
+        "board_id": "shield",
+        "board_url": "https://jobs.ashbyhq.com/shield"
+    },
+    {
+        "company": "weave",
+        "platform": "ashby",
+        "board_id": "weave",
+        "board_url": "https://jobs.ashbyhq.com/weave"
+    },
+    {
+        "company": "aiprise",
+        "platform": "ashby",
+        "board_id": "aiprise",
+        "board_url": "https://jobs.ashbyhq.com/aiprise"
+    },
+    {
+        "company": "brm.ai",
+        "platform": "ashby",
+        "board_id": "brm.ai",
+        "board_url": "https://jobs.ashbyhq.com/brm.ai"
+    },
+    {
+        "company": "neuralconcept",
+        "platform": "ashby",
+        "board_id": "neuralconcept",
+        "board_url": "https://jobs.ashbyhq.com/neuralconcept"
+    },
+    {
+        "company": "handshake",
+        "platform": "ashby",
+        "board_id": "handshake",
+        "board_url": "https://jobs.ashbyhq.com/handshake"
+    },
+    {
+        "company": "Meraki-Labs",
+        "platform": "ashby",
+        "board_id": "Meraki-Labs",
+        "board_url": "https://jobs.ashbyhq.com/Meraki-Labs"
+    },
+    {
+        "company": "fieldguide",
+        "platform": "ashby",
+        "board_id": "fieldguide",
+        "board_url": "https://jobs.ashbyhq.com/fieldguide"
+    },
+    {
+        "company": "certa",
+        "platform": "ashby",
+        "board_id": "certa",
+        "board_url": "https://jobs.ashbyhq.com/certa"
+    },
+    {
+        "company": "quadric",
+        "platform": "ashby",
+        "board_id": "quadric",
+        "board_url": "https://jobs.ashbyhq.com/quadric"
+    },
+    {
+        "company": "simular",
+        "platform": "ashby",
+        "board_id": "simular",
+        "board_url": "https://jobs.ashbyhq.com/simular"
+    },
+    {
+        "company": "taktile",
+        "platform": "ashby",
+        "board_id": "taktile",
+        "board_url": "https://jobs.ashbyhq.com/taktile"
+    },
+    {
+        "company": "semgrep",
+        "platform": "ashby",
+        "board_id": "semgrep",
+        "board_url": "https://jobs.ashbyhq.com/semgrep"
+    },
+    {
+        "company": "realmalliance",
+        "platform": "ashby",
+        "board_id": "realmalliance",
+        "board_url": "https://jobs.ashbyhq.com/realmalliance"
+    },
+    {
+        "company": "ashby",
+        "platform": "ashby",
+        "board_id": "ashby",
+        "board_url": "https://jobs.ashbyhq.com/ashby"
+    },
+    {
+        "company": "plane",
+        "platform": "ashby",
+        "board_id": "plane",
+        "board_url": "https://jobs.ashbyhq.com/plane"
+    },
+    {
+        "company": "axelera",
+        "platform": "ashby",
+        "board_id": "axelera",
+        "board_url": "https://jobs.ashbyhq.com/axelera"
+    },
+    {
+        "company": "riveron",
+        "platform": "ashby",
+        "board_id": "riveron",
+        "board_url": "https://jobs.ashbyhq.com/riveron"
+    },
+    {
+        "company": "blitzy",
+        "platform": "ashby",
+        "board_id": "blitzy",
+        "board_url": "https://jobs.ashbyhq.com/blitzy"
+    },
+    {
+        "company": "deepintent",
+        "platform": "greenhouse",
+        "board_id": "deepintent",
+        "board_url": "https://boards.greenhouse.io/deepintent"
+    },
+    {
+        "company": "episodesixlinkedin",
+        "platform": "greenhouse",
+        "board_id": "episodesixlinkedin",
+        "board_url": "https://boards.greenhouse.io/episodesixlinkedin"
+    },
+    {
+        "company": "capco",
+        "platform": "greenhouse",
+        "board_id": "capco",
+        "board_url": "https://boards.greenhouse.io/capco"
+    },
+    {
+        "company": "asteralabs",
+        "platform": "greenhouse",
+        "board_id": "asteralabs",
+        "board_url": "https://boards.greenhouse.io/asteralabs"
+    },
+    {
+        "company": "grafanalabs",
+        "platform": "greenhouse",
+        "board_id": "grafanalabs",
+        "board_url": "https://boards.greenhouse.io/grafanalabs"
+    },
+    {
+        "company": "neweratech",
+        "platform": "greenhouse",
+        "board_id": "neweratech",
+        "board_url": "https://boards.greenhouse.io/neweratech"
+    },
+    {
+        "company": "ethernovia",
+        "platform": "greenhouse",
+        "board_id": "ethernovia",
+        "board_url": "https://boards.greenhouse.io/ethernovia"
+    },
+    {
+        "company": "gravitonresearchcapital",
+        "platform": "greenhouse",
+        "board_id": "gravitonresearchcapital",
+        "board_url": "https://boards.greenhouse.io/gravitonresearchcapital"
+    },
+    {
+        "company": "xometry",
+        "platform": "greenhouse",
+        "board_id": "xometry",
+        "board_url": "https://boards.greenhouse.io/xometry"
+    },
+    {
+        "company": "scm",
+        "platform": "greenhouse",
+        "board_id": "scm",
+        "board_url": "https://boards.greenhouse.io/scm"
+    },
+    {
+        "company": "karat",
+        "platform": "greenhouse",
+        "board_id": "karat",
+        "board_url": "https://boards.greenhouse.io/karat"
+    },
+    {
+        "company": "spacex",
+        "platform": "greenhouse",
+        "board_id": "spacex",
+        "board_url": "https://boards.greenhouse.io/spacex"
+    },
+    {
+        "company": "getwellnetwork",
+        "platform": "greenhouse",
+        "board_id": "getwellnetwork",
+        "board_url": "https://boards.greenhouse.io/getwellnetwork"
+    },
+    {
+        "company": "machindustries",
+        "platform": "greenhouse",
+        "board_id": "machindustries",
+        "board_url": "https://boards.greenhouse.io/machindustries"
+    },
+    {
+        "company": "wikimediainternship",
+        "platform": "greenhouse",
+        "board_id": "wikimediainternship",
+        "board_url": "https://boards.greenhouse.io/wikimediainternship"
+    },
+    {
+        "company": "pacificfusion",
+        "platform": "greenhouse",
+        "board_id": "pacificfusion",
+        "board_url": "https://boards.greenhouse.io/pacificfusion"
+    },
+    {
+        "company": "wikimedia",
+        "platform": "greenhouse",
+        "board_id": "wikimedia",
+        "board_url": "https://boards.greenhouse.io/wikimedia"
+    },
+    {
+        "company": "techholding",
+        "platform": "greenhouse",
+        "board_id": "techholding",
+        "board_url": "https://boards.greenhouse.io/techholding"
+    },
+    {
+        "company": "truveta",
+        "platform": "greenhouse",
+        "board_id": "truveta",
+        "board_url": "https://boards.greenhouse.io/truveta"
+    },
+    {
+        "company": "amtechsoftware",
+        "platform": "greenhouse",
+        "board_id": "amtechsoftware",
+        "board_url": "https://boards.greenhouse.io/amtechsoftware"
+    },
+    {
+        "company": "sureify",
+        "platform": "greenhouse",
+        "board_id": "sureify",
+        "board_url": "https://boards.greenhouse.io/sureify"
+    },
+    {
+        "company": "definitivehcindia",
+        "platform": "greenhouse",
+        "board_id": "definitivehcindia",
+        "board_url": "https://boards.greenhouse.io/definitivehcindia"
+    },
+    {
+        "company": "entrata",
+        "platform": "lever",
+        "board_id": "entrata",
+        "board_url": "https://jobs.lever.co/entrata"
+    },
+    {
+        "company": "shopback-2",
+        "platform": "lever",
+        "board_id": "shopback-2",
+        "board_url": "https://jobs.lever.co/shopback-2"
+    },
+    {
+        "company": "meesho",
+        "platform": "lever",
+        "board_id": "meesho",
+        "board_url": "https://jobs.lever.co/meesho"
+    },
+    {
+        "company": "anotherco",
+        "platform": "lever",
+        "board_id": "anotherco",
+        "board_url": "https://jobs.lever.co/anotherco"
+    },
+    {
+        "company": "sunsrce",
+        "platform": "lever",
+        "board_id": "sunsrce",
+        "board_url": "https://jobs.lever.co/sunsrce"
+    },
+    {
+        "company": "cargo-partner",
+        "platform": "lever",
+        "board_id": "cargo-partner",
+        "board_url": "https://jobs.lever.co/cargo-partner"
+    },
+    {
+        "company": "rocketpartners",
+        "platform": "lever",
+        "board_id": "rocketpartners",
+        "board_url": "https://jobs.lever.co/rocketpartners"
+    },
+    {
+        "company": "rover",
+        "platform": "lever",
+        "board_id": "rover",
+        "board_url": "https://jobs.lever.co/rover"
+    },
+    {
+        "company": "datalabusa",
+        "platform": "lever",
+        "board_id": "datalabusa",
+        "board_url": "https://jobs.lever.co/datalabusa"
+    },
+    {
+        "company": "bisnow",
+        "platform": "lever",
+        "board_id": "bisnow",
+        "board_url": "https://jobs.lever.co/bisnow"
+    },
+    {
+        "company": "latitudeinc",
+        "platform": "lever",
+        "board_id": "latitudeinc",
+        "board_url": "https://jobs.lever.co/latitudeinc"
+    },
+    {
+        "company": "jobgether",
+        "platform": "lever",
+        "board_id": "jobgether",
+        "board_url": "https://jobs.lever.co/jobgether"
+    },
+    {
+        "company": "acceldata",
+        "platform": "lever",
+        "board_id": "acceldata",
+        "board_url": "https://jobs.lever.co/acceldata"
+    },
+    {
+        "company": "weloglobal",
+        "platform": "lever",
+        "board_id": "weloglobal",
+        "board_url": "https://jobs.lever.co/weloglobal"
+    },
+    {
+        "company": "dnb",
+        "platform": "lever",
+        "board_id": "dnb",
+        "board_url": "https://jobs.lever.co/dnb"
+    },
+    {
+        "company": "zeta",
+        "platform": "lever",
+        "board_id": "zeta",
+        "board_url": "https://jobs.lever.co/zeta"
+    },
+    {
+        "company": "sophos",
+        "platform": "ashby",
+        "board_id": "sophos",
+        "board_url": "https://jobs.ashbyhq.com/sophos"
+    },
+    {
+        "company": "parspec",
+        "platform": "ashby",
+        "board_id": "parspec",
+        "board_url": "https://jobs.ashbyhq.com/parspec"
+    },
+    {
+        "company": "junipersquare",
+        "platform": "ashby",
+        "board_id": "junipersquare",
+        "board_url": "https://jobs.ashbyhq.com/junipersquare"
+    },
+    {
+        "company": "anyone-ai",
+        "platform": "ashby",
+        "board_id": "anyone-ai",
+        "board_url": "https://jobs.ashbyhq.com/anyone-ai"
+    },
+    {
+        "company": "cognition",
+        "platform": "ashby",
+        "board_id": "cognition",
+        "board_url": "https://jobs.ashbyhq.com/cognition"
+    },
+    {
+        "company": "interview-kickstart",
+        "platform": "ashby",
+        "board_id": "interview-kickstart",
+        "board_url": "https://jobs.ashbyhq.com/interview-kickstart"
+    },
+    {
+        "company": "amplify",
+        "platform": "ashby",
+        "board_id": "amplify",
+        "board_url": "https://jobs.ashbyhq.com/amplify"
+    },
+    {
+        "company": "lyric",
+        "platform": "ashby",
+        "board_id": "lyric",
+        "board_url": "https://jobs.ashbyhq.com/lyric"
+    },
+    {
+        "company": "openai",
+        "platform": "ashby",
+        "board_id": "openai",
+        "board_url": "https://jobs.ashbyhq.com/openai"
+    }
+]
